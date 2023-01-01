@@ -1,14 +1,15 @@
+import clsx from "clsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { RenderWhen } from "../../components";
-
+import Answers from "./Components/Answers";
 import useQuestion from "./hooks/useQuestion";
-
-
+import useSubmitAnswer from "./hooks/useSubmitAnswer";
+import useRerender from "../../hooks/useRerender";
 const QuestionDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data, isLoading, error, votes, handleUpvote, handleDownvote } = useQuestion(id);
-
+  const {errors,onChange,onSubmit,values} = useSubmitAnswer(id)
   return (
     <div className="py-8">
 
@@ -42,14 +43,23 @@ const QuestionDetails = () => {
           <div>
             <div className="pb-2 border-b border-gray-300 text-xs mb-4">
               <span className="text-gray-500">Asked: </span>
-              <span className=" mr-4">{data.created_at}</span>
+              <span className=" mr-4">{data?.created_at}</span>
 
               <span className="text-gray-500">By </span>
-              <span className="">{data.author}</span>
+              <span className="">{data?.author}</span>
             </div>
-            <p>{data.description}</p>
+            <p>{data?.description}</p>
           </div>
         </div>
+        <form onSubmit={onSubmit} className="border-y border-slate-300 p-5 my-5">
+          <div className="font-semibold text-xl">Your Answer</div>
+          <textarea onChange={onChange} value={values.description} className={clsx('pl-3 w-full my-3 p-5 border border-slate-300 rounded-md',
+          {'border-red-600' : errors.description} 
+          )} placeholder="Write your answer" name="description" id="description" cols="30" rows="10"></textarea>
+          <div className='py-1 text-xs text-red-500'>{errors.description}</div>
+          <button type="submit" className="border border-slate-300 rounded-lg px-3 py-1 hover:scale-95 m-5">Submit answer</button>
+        </form>
+        <Answers data={data?.answers} questionId={id} />
       </RenderWhen>
 
     </div>

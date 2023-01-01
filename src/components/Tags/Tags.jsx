@@ -8,17 +8,17 @@ const TagItem = ({ label, onClick }) => {
   )
 };
 
-const Tags = ({ tags }) => {
-  const navigate = useNavigate();
+const Tags = ({ tags , onClick }) => {
+  // const navigate = useNavigate();
 
-  const handleClick = (label) => navigate(`/search?query=${label}`);
+  // const handleClick = (label) => navigate(`/search?query=${label}`);
 
   return (
-    <>
+    <div>
       {
-        tags.map((label) => <TagItem key={label} label={label} onClick={handleClick} />)
+        tags.map((label) => <TagItem key={label} label={label} onClick={onClick} />)
       }
-    </>
+    </div>
   )
 };
 

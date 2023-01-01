@@ -6,6 +6,7 @@ import MenuItem from './MenuItem';
 
 // Hooks
 import useDebounce from '../../hooks/useDebounce';
+import useProfile from '../../hooks/useProfile';
 
 // i18n
 
@@ -15,6 +16,7 @@ const Header = () => {
   const location = useLocation();
   const [, setSearchParams] = useSearchParams();
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const [profile] = useProfile()
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -59,9 +61,9 @@ const Header = () => {
 
       <Link to="/profile">
         <div className="flex items-center justify-end cursor-pointer">
-          <img src="https://avatars.githubusercontent.com/u/18223047?v=4" alt="Hesan Aminiloo" className="rounded-full mr-2 w-8 h-8 border border-gray-300" />
+          <img src={profile.picUrl} alt="Sepehr Rahimi" className="rounded-full mr-2 w-8 h-8 border border-gray-300" />
           <span className="text-sm">
-            Hesan Aminiloo
+            {profile.fullName}
           </span>
         </div>
       </Link>

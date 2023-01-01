@@ -17,7 +17,6 @@ const QuestionInfoItem = ({ title, value }) => {
 };
 
 const QuestionItem = ({ className = '', id, title, date, tags, author, description, views, rate, answers }) => {
-  console.log({date});
   return (
     <div className={clsx('rounded p-4 border border-gray-200 mb-4 flex flex-col w-full', className)}>
       <div className="flex">

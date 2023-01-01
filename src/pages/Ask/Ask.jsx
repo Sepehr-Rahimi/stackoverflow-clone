@@ -7,6 +7,7 @@ import useSubmitQuestion from './hooks/useSubmitQuestion';
 // Components
 import { Error, RenderWhen } from '../../components';
 import { useNavigate } from 'react-router-dom';
+import Tags from '../../components/Tags';
 
 const QuestionTitle = ({ value, onChange, disabled, errorMsg, name }) => {
   const id = useId();
@@ -59,9 +60,10 @@ const Description = ({ value, onChange, disabled, errorMsg, name }) => {
 
 const Ask = () => {
   const navigate = useNavigate();
-  const { isLoading, error, errors, onSubmit, values, onChange } = useSubmitQuestion({ afterSubmission: () => {
+  const { isLoading, error, errors, onSubmit, values, onChange, } = useSubmitQuestion({ afterSubmission: () => {
     navigate('/')
   } });
+  const tags = ['css','html']
 
   return (
     <div className="py-8 flex flex-col">
@@ -88,6 +90,14 @@ const Ask = () => {
           errorMsg={errors.description}
           name="description"
         />
+        <div className='my-5 border-slate-200 border rounded-md p-3'>
+          <span className='my-3'>Tags : </span>
+          <input className='p-2 mx-3 border rounded w-1/2' type="text" />
+          <div className='my-3 mx-3'>
+            <Tags tags={tags} />
+          </div>
+        </div>
+        
 
         <div className='py-4 flex justify-end'>
           <div>

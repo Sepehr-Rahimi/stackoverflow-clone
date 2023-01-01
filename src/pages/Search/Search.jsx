@@ -41,6 +41,11 @@ const Search = () => {
           ))
         }
       </RenderWhen>
+
+      <RenderWhen condition={!isLoading && data && data.questions.length === 0}>
+      <h1 className='mb-8 text-lg font-bold'>Search Results</h1>
+        <div className="pl-6 ">No result</div>
+      </RenderWhen> 
     </div>
   )
 };

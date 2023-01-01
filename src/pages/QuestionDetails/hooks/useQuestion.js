@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useReducer } from 'react';
 
 // Helpers
 import axios from 'axios';
@@ -6,18 +6,20 @@ import axios from 'axios';
 // endpoints
 import Endpoints from '../../../constants/APIs';
 
+import reducer from './reducer';
+import initialState from './store';
+import * as actions from './actions'
+
 
 const useQuestion = (id) => {
-  const [data, setData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [votes, setVotes] = useState(0);
   const hasAlreadyVoted = useRef(false);
+  const [state,dispatch] = useReducer(reducer,initialState)
+  const {data,isLoading,error,votes} = state
 
   const handleUpvote = async () => {
     try {
       await axios.patch(Endpoints.getQuestionById(data.id), { rate: { up: data.rate.up + 1, down: data.rate.down, total: data.rate.total + 1 } });
-      if (!hasAlreadyVoted.current) setVotes((currentVote) => currentVote + 1);
+      if (!hasAlreadyVoted.current) dispatch(actions.upVote());
       else alert('You already voted');
     } catch (e) {
 
@@ -27,7 +29,7 @@ const useQuestion = (id) => {
   const handleDownvote = async () => {
     try {
       await axios.patch(Endpoints.getQuestionById(data.id), { rate: { up: data.rate.up, down: data.rate.down + 1, total: data.rate.total + 1 } });
-      if (!hasAlreadyVoted.current) setVotes((currentVote) => currentVote - 1);
+      if (!hasAlreadyVoted.current) dispatch(actions.downVote());
       else alert('You already voted');
     } catch (e) {
       
@@ -55,21 +57,16 @@ const useQuestion = (id) => {
 
     const getData = async () => {
       try {
-        setIsLoading(true);
-        setError(false);
-
+        dispatch(actions.getDataAction())
         const { data: questionDetails } = await axios.get(
           Endpoints.getQuestionById(id),
           // { cancelToken: axiosCancelToken.token }
         );
-        setIsLoading(false);
-        setData(questionDetails);
-        setVotes(questionDetails?.rate?.up - questionDetails?.rate?.down);
+        dispatch(actions.getDataSuccssesAction(questionDetails))
         hasAlreadyVoted.current = false;
 
       } catch (e) {
-        setError(true);
-        setIsLoading(false);
+        dispatch(actions.getDataFailAction())
       }
     };
 
